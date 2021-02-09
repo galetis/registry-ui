@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="static/assets/bootstrap.min.css" rel="stylesheet"/>
+
+    <title>Registry UI</title>
+</head>
+
+<body>
+<div class="container" style="margin-top: 30px">
+
+    <h5 class="text-center">Registry: {{.Registry}}</h5>
+    <!-- columns should be the immediate child of a .row -->
+    <div class="row">
+        <div class="col">
+            <h5>Repositories</h5>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .Repositories}}
+                <tr>
+                    <td><a href="?repo={{.}}">{{.}}</a></td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-9">
+            <h5>Tags</h5>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{range .Tags}}
+                <tr>
+                    <td>{{.Name}}<br/>{{.Digest}}</td>
+                    <td>{{.Size}}</td>
+                </tr>
+                {{end}}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
