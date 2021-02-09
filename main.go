@@ -98,10 +98,16 @@ func main() {
 					imgSize += size
 				}
 
+				config, _ := img.ConfigFile()
+
 				data["TagDetail"] = map[string]interface{}{
-					"Name":   tag,
-					"Digest": digest.String(),
-					"Size":   ByteCountSI(imgSize),
+					"Name":         tag,
+					"Digest":       digest.String()[:len(digest.String())-30],
+					"DigestFull":   digest.String(),
+					"Size":         ByteCountSI(imgSize),
+					"Created":      config.Created.String(),
+					"Architecture": config.Architecture,
+					"OS":           config.OS,
 				}
 
 			}

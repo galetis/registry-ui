@@ -60,8 +60,11 @@
 
         <div class="col">
             <h5>Tag: {{.TagDetail.Name}}</h5>
-            {{.TagDetail.Digest}}
-            Size : {{.TagDetail.Size}}
+            <p title="{{.TagDetail.DigestFull}}">{{.TagDetail.Digest}}</p>
+            <p>Size : {{.TagDetail.Size}}</p>
+            <p>Created : {{.TagDetail.Created}}</p>
+            <p>Architecture : {{.TagDetail.Architecture}}</p>
+            <p>OS : {{.TagDetail.OS}}</p>
 
         </div>
     </div>
