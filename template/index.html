@@ -28,31 +28,40 @@
                 <tbody>
                 {{range .Repositories}}
                 <tr>
-                    <td><a href="?repo={{.}}">{{.}}</a></td>
+                    <td>
+                        {{if eq $.SelectedRepo .}} {{.}} {{else}} <a href="?repo={{.}}">{{.}}</a> {{end}}
+                    </td>
                 </tr>
                 {{end}}
                 </tbody>
             </table>
 
         </div>
-        <div class="col-9">
+        <div class="col">
             <h5>Tags</h5>
             <table class="table table-sm">
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Size</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{range .Tags}}
                 <tr>
-                    <td>{{.Name}}<br/>{{.Digest}}</td>
-                    <td>{{.Size}}</td>
+                    <td>
+                        {{if eq $.SelectedTag .}} {{.}} {{else}} <a href="?repo={{$.SelectedRepo}}&tag={{.}}">{{.}}</a>{{end}}
+                    </td>
                 </tr>
                 {{end}}
                 </tbody>
             </table>
+
+        </div>
+
+        <div class="col">
+            <h5>Tag: {{.TagDetail.Name}}</h5>
+            {{.TagDetail.Digest}}
+            Size : {{.TagDetail.Size}}
 
         </div>
     </div>

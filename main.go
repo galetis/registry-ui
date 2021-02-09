@@ -55,21 +55,39 @@ func main() {
 		repos, err := remote.Catalog(context.Background(), registry, auth)
 
 		if err != nil {
-			log.Fatal(err)
+			sendError(writer, err)
+			return
 		}
 
 		repo := request.URL.Query().Get("repo")
+		tag := request.URL.Query().Get("tag")
 
-		tagList := []map[string]interface{}{}
+		data := map[string]interface{}{
+			"Registry":     registry.String(),
+			"Repositories": repos,
+
+			"SelectedRepo": repo,
+			"SelectedTag":  tag,
+		}
 
 		if repo != "" {
 			repoName, _ := name.NewRepository(registry.Name() + "/" + repo)
-			tags, _ := remote.List(repoName, auth)
+			tags, err := remote.List(repoName, auth)
+			if err != nil {
+				sendError(writer, err)
+				return
+			}
 
-			for _, tag := range tags {
+			data["Tags"] = tags
+
+			if tag != "" {
 
 				tagName, _ := name.NewTag(repoName.String() + ":" + tag)
-				img, _ := remote.Image(tagName, auth)
+				img, err := remote.Image(tagName, auth)
+				if err != nil {
+					sendError(writer, err)
+					return
+				}
 
 				digest, _ := img.Digest()
 				layers, _ := img.Layers()
@@ -80,22 +98,18 @@ func main() {
 					imgSize += size
 				}
 
-				tagList = append(tagList, map[string]interface{}{
+				data["TagDetail"] = map[string]interface{}{
 					"Name":   tag,
 					"Digest": digest.String(),
 					"Size":   ByteCountSI(imgSize),
-				})
-			}
-		}
+				}
 
-		data := map[string]interface{}{
-			"Registry":     registry.String(),
-			"Repositories": repos,
-			"Tags":         tagList,
+			}
+
 		}
 
 		if err := tmpl.Execute(writer, data); err != nil {
-			log.Fatal(err)
+			sendError(writer, err)
 		}
 
 	})
@@ -118,4 +132,9 @@ func ByteCountSI(b int64) string {
 	}
 	return fmt.Sprintf("%.1f %cB",
 		float64(b)/float64(div), "kMGTPE"[exp])
+}
+
+func sendError(w http.ResponseWriter, message error) {
+	w.WriteHeader(http.StatusInternalServerError)
+	_, _ = w.Write([]byte(message.Error()))
 }
