@@ -36,7 +36,7 @@ func main() {
 		Password: *pass,
 	}))
 
-	registry, err := name.NewRegistry(*registryUrl)
+	registry, err := name.NewRegistry(*registryUrl, name.Insecure)
 	if err != nil {
 		log.Fatal(err)
 	}
