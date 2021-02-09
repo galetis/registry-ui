@@ -4,7 +4,7 @@ Simple docker registry ui written with https://github.com/google/go-containerreg
 
 ### Run with docker
 
-`docker run -p 80:80 docker.pkg.github.com/galetis/registry-ui/ui -url localhost:5000`
+`docker run -p 80:80 galetis/registry-ui -url "localhost:5000"`
 
 ### Run standalone
 
