@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"embed"
 	"flag"
 	"fmt"
@@ -21,6 +22,8 @@ var assets embed.FS
 var templates embed.FS
 
 func main() {
+
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	port := flag.Int("port", 80, "Http listener port")
 	registryUrl := flag.String("url", "localhost:5000", "Url for registry endpoint")
